@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     }
 
     const options = {};
-    if (cas && String(cas).trim()) options.cas = String(cas).trim(); // ex: "eclat-bfc" ou "ac-besancon"
+    if (cas && String(cas).trim()) options.cas = String(cas).trim(); // ex: "eclat-bfc", "ac-besancon"
 
     const session = await pronote.login(url, username, password, options);
 
