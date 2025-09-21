@@ -6,12 +6,13 @@ const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate(
 const hhmm   = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
 module.exports = async (req, res) => {
-  // --- CORS complet ---
+  // --- CORS (complet) ---
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
-  res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
+  res.setHeader("Vary", "Origin");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
   if (req.method === "OPTIONS") return res.status(200).end();
-  // ---------------------
+  // ----------------------
 
   try {
     const { url, username, password, cas, from, to } =
@@ -29,7 +30,6 @@ module.exports = async (req, res) => {
     const start = from ? new Date(from) : new Date();
     const end   = to   ? new Date(to)   : new Date(start.getTime() + 6*86400000);
 
-    // Emploi du temps
     const timetable = await session.timetable(start, end);
     const edt = timetable.map(ev => ({
       date: isoDate(ev.from),
@@ -40,7 +40,6 @@ module.exports = async (req, res) => {
       cancelled: !!ev.isCancelled
     }));
 
-    // Devoirs
     const hws = await session.homeworks(start, end);
     const homeworks = hws.map(h => ({
       date: isoDate(h.for),
