@@ -1,4 +1,4 @@
-// api/pronote.js (Vercel serverless CJS)
+// api/pronote.js (Vercel serverless, CommonJS)
 const pronote = require("pronote-api");
 
 const pad = n => String(n).padStart(2, "0");
@@ -6,6 +6,12 @@ const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate(
 const hhmm   = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
 module.exports = async (req, res) => {
+  // --- CORS (important pour appeler depuis ton site) ---
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.status(200).end();
+  // -----------------------------------------------------
+
   try {
     const { url, username, password, cas, from, to } =
       req.method === "POST" ? req.body : req.query;
