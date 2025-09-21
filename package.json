@@ -1,4 +1,8 @@
 {
+  "name": "pronote-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
   "dependencies": {
     "pronote-api": "latest"
   }
