@@ -6,11 +6,12 @@ const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate(
 const hhmm   = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
 module.exports = async (req, res) => {
-  // --- CORS (important pour appeler depuis ton site) ---
+  // --- CORS complet ---
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
   if (req.method === "OPTIONS") return res.status(200).end();
-  // -----------------------------------------------------
+  // ---------------------
 
   try {
     const { url, username, password, cas, from, to } =
@@ -21,7 +22,7 @@ module.exports = async (req, res) => {
     }
 
     const options = {};
-    if (cas && String(cas).trim()) options.cas = String(cas).trim(); // ex: "ac-paris"
+    if (cas && String(cas).trim()) options.cas = String(cas).trim(); // ex: "eclat-bfc" ou "ac-besancon"
 
     const session = await pronote.login(url, username, password, options);
 
